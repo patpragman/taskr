@@ -19,7 +19,6 @@ type Config struct {
 }
 
 
-
 func createNoteString(words []string) string {
 	// parse command line arguments into a single string
 	var s, sep string
@@ -196,7 +195,7 @@ func main() {
 		result, err = countNotes(conf)
 	} else if cmd == "list" {
 		result, err = listNotes(conf)
-	} else if cmd == "remove" {
+	} else if cmd == "remove" || cmd == "rm" {
 
 		i, err := strconv.Atoi(os.Args[2])
 		if err == nil {
