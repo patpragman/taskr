@@ -3,4 +3,4 @@
 
 version = "0.1"
 localStorage = true
-storageAddress = "/home/patrickpragman/.local"
+storageAddress = "/home/patrickpragman/.local/taskr.csv"
