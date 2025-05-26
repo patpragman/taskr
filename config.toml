@@ -1,0 +1,6 @@
+# configuration for taskr
+# contains the configuration of the application
+
+version = "0.1"
+localStorage = true
+storageAddress = "/home/patrickpragman/.local"
