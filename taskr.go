@@ -1,23 +1,22 @@
 package main
 
 import (
-	"fmt"
-	"os"
 	"encoding/csv"
+	"fmt"
 	"github.com/BurntSushi/toml"
-	"time"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
-	"path/filepath"
+	"time"
 )
 
 type Config struct {
 	// struct to store the configuration
-	Version string
-	LocalStorage bool
+	Version        string
+	LocalStorage   bool
 	StorageAddress string
 }
-
 
 func createNoteString(words []string) string {
 	// parse command line arguments into a single string
@@ -38,11 +37,11 @@ func saveNoteString(noteString string, conf Config) (string, error) {
 		fileExists = true
 	}
 
-	// next open the file for appending	
+	// next open the file for appending
 	f, err := os.OpenFile(conf.StorageAddress, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return "", err
-	}	
+	}
 	defer f.Close()
 
 	// next create our writer and defer the flush until the function returns
@@ -50,17 +49,17 @@ func saveNoteString(noteString string, conf Config) (string, error) {
 	defer writer.Flush()
 
 	// if the file is brand new you need to write headers
-	if !fileExists{
+	if !fileExists {
 		if err := writer.Write([]string{"Date", "Note"}); err != nil {
 			return "", err
 		}
-	
+
 	}
 
 	// finally, we can write the actual row (man, you end up writing a lot of boilerplate in go)
 	timestamp := time.Now().Format(time.RFC3339)
 	if err := writer.Write([]string{timestamp, noteString}); err != nil {
-		return "", err	
+		return "", err
 	}
 
 	return "Saved...", nil
@@ -104,7 +103,6 @@ func listNotes(conf Config) (string, error) {
 
 	return strings.TrimSuffix(s, "\n"), nil
 
-
 }
 
 func removeNote(i int, conf Config) (string, error) {
@@ -123,13 +121,12 @@ func removeNote(i int, conf Config) (string, error) {
 	}
 
 	// Check bounds
-	if i < 1 || i > len(records){
+	if i < 1 || i > len(records) {
 		return fmt.Sprintf("Invalid Index: %d", i), fmt.Errorf("invalid index: %d", i)
 	}
 
 	// now remove the row at that index...
 	newRecords := append(records[:i-1], records[i:]...)
-
 
 	// now we need to rewrite the file without the index
 	f.Close()
@@ -145,12 +142,9 @@ func removeNote(i int, conf Config) (string, error) {
 	if err := writer.WriteAll(newRecords); err != nil {
 		return "Error updating file...", err
 	}
-	
-	
+
 	return fmt.Sprintf("Removed the note %d", i), nil
 }
-
-
 
 func main() {
 
@@ -184,7 +178,6 @@ func main() {
 		cmd = os.Args[1]
 	}
 
-	
 	//fmt.Printf("You selected '%s' command\n", cmd)
 
 	var result string
@@ -201,7 +194,7 @@ func main() {
 		if err == nil {
 			result, err = removeNote(i, conf)
 		}
-		
+
 	} else if cmd == "about" {
 		// about and help stuff goes here
 		result = `-----------------------------------------------
@@ -215,9 +208,8 @@ list -- lists all the current notes and their indices
 remove <i> -- removes that particular index
 n -- gives you a count of the current notes
 -----------------------------------------------`
-	result = fmt.Sprintf(result, conf.Version)
+		result = fmt.Sprintf(result, conf.Version)
 	}
-
 
 	// return the results to the terminal
 	if err != nil {
@@ -226,8 +218,4 @@ n -- gives you a count of the current notes
 		fmt.Println(result)
 	}
 
-	
-
 }
-
-
