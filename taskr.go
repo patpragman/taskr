@@ -194,6 +194,8 @@ func main() {
 		if err == nil {
 			result, err = removeNote(i, conf)
 		}
+	} else if cmd == "pop" {
+		result, err = removeNote(1, conf)
 
 	} else if cmd == "about" {
 		// about and help stuff goes here
