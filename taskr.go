@@ -173,7 +173,7 @@ func main() {
 	// pull in all the args first
 	var cmd string
 	if len(os.Args) < 2 {
-		cmd = "about"
+		cmd = "help"
 	} else {
 		cmd = os.Args[1]
 	}
@@ -202,15 +202,17 @@ func main() {
 		result = `-----------------------------------------------
 Taskr Version %s
 By Pat Pragman, Pragman LLC
-www.pragman.io
------------------------------------------------
-about -- takes you here
+www.pragman.io`
+		result = fmt.Sprintf(result, conf.Version)
+	} else {
+		result = `-----------------------------------------------
+about -- takes you to some information about who created the app
 add <then text> -- adds that text to the note file
 list -- lists all the current notes and their indices
 remove <i> -- removes that particular index
 n -- gives you a count of the current notes
------------------------------------------------`
-		result = fmt.Sprintf(result, conf.Version)
+-----------------------------------------------
+`
 	}
 
 	// return the results to the terminal
